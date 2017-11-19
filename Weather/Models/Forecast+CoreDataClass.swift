@@ -28,4 +28,20 @@ public class Forecast: NSManagedObject {
 		self.isUserLocation = isUserLocation
 	}
 	
+	func update(withAPIForecast forecast: APIForecast, date: Date) {
+		temperature = forecast.temperature
+		wind = forecast.wind
+		windDirection = Int16(forecast.windDirection)
+		nebulosity = Int16(forecast.nebulosity)
+		rain = forecast.rain
+		self.date = date as! NSDate
+	}
+	
+	func isUpToDate() -> Bool {
+		guard let forecastDate = self.date, let currentDate = Date().getCurrentForecastDate() as? NSDate else {
+			return false
+		}
+		return forecastDate == currentDate
+	}
+	
 }

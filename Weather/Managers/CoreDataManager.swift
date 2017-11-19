@@ -54,14 +54,52 @@ class CoreDataManager: NSObject {
 		return forecastsArray
 	}
 	
-	func saveForecast(withForecast APIForecast: APIForecast, location: CLLocation, cityName: String) {
+	func retrieveForecast(withName name: String, location: CLLocation) -> Forecast? {
+		let forecastsRequest: NSFetchRequest<Forecast> = Forecast.fetchRequest()
+		forecastsRequest.predicate = NSPredicate(format: "cityName == %@", name)
 		do {
-			let entity = NSEntityDescription.entity(forEntityName: "Forecast", in: CoreDataManager.shared.managedObjectContext)!
-			let newForecast = Forecast.init(withAPIForecast: APIForecast, cityName: cityName, position: location, date: Date(), isUserLocation: false, entity: entity, insertInto: CoreDataManager.shared.managedObjectContext)
+			let forecasts = try self.managedObjectContext.fetch(forecastsRequest) as [Forecast]
+			if forecasts.count > 0 {
+				for forecast in forecasts {
+					if location.distance(from: CLLocation(latitude: forecast.latitude, longitude: forecast.longitude)) < 1000 {// same place
+						return forecast
+					}
+				}
+			} else {
+				print("no existing forecast")
+			}
+		} catch {
+			print("error fetching forecasts")
+		}
+		return nil
+	}
+	
+	func saveForecast(withForecast APIForecast: APIForecast, location: CLLocation, cityName: String) {
+		if let forecast = retrieveForecast(withName: cityName, location: location) {// forecast is existing : update CoreData forecast
+			if !forecast.isUpToDate() {// forecast should be updated
+				forecast.update(withAPIForecast: APIForecast, date: Date().getCurrentForecastDate())
+			} else {
+				print("forecast already up to date")
+			}
+		} else {// create new CoreData forecast
+			do {
+				let entity = NSEntityDescription.entity(forEntityName: "Forecast", in: CoreDataManager.shared.managedObjectContext)!
+				let newForecast = Forecast.init(withAPIForecast: APIForecast, cityName: cityName, position: location, date: Date().getCurrentForecastDate(), isUserLocation: false, entity: entity, insertInto: CoreDataManager.shared.managedObjectContext)
+				try managedObjectContext.save()
+			} catch {
+				print("error saving forecast")
+			}
+		}
+	}
+	
+	func deleteForecast(_ forecast: Forecast) {
+		managedObjectContext.delete(forecast)
+		do {
 			try managedObjectContext.save()
 		} catch {
-			print("error saving forecast")
+			print(error.localizedDescription)
 		}
+		
 	}
 	
 	
