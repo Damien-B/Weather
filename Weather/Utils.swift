@@ -44,3 +44,17 @@ extension Date {
 		return cleanForecastDate
 	}
 }
+
+extension Double {
+	// get the temperature in °C (CoreData entities temperature is in °K)
+	func kelvinToCelsius() -> Double {
+		return self-273.15
+	}
+}
+
+extension String {
+	// helper for localized strings
+	var localized: String {
+		return NSLocalizedString(self, comment: "")
+	}
+}
