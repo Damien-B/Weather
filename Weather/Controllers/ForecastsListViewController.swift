@@ -14,6 +14,7 @@ class ForecastsListViewController: UIViewController {
 	@IBOutlet weak var forecastsTableView: UITableView!
 	
 	var forecastsList = [Forecast]()
+	var newForecastText: String = ""
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,26 +64,25 @@ extension ForecastsListViewController: ActionTableViewCellDelegate {
 	func buttonClicked(atIndexPath indexPath: IndexPath) {
 			
 			var TF: UITextField?
-			// Create the AlertController
+			// create the alert controller
 			let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter une ville", message: "", preferredStyle: .alert)
 			
-			// Create and add the Cancel action
+			// create and add the cancel action
 			let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: .cancel) { action -> Void in
 				actionSheetController.dismiss(animated: true, completion: nil)
 			}
 			let nextAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
-//				self.newForecastText = TF!.text!
-//				LocationManager.shared.location(fromAddress: self.newForecastText!, completion: { (location) in
-//					if let location = location {
-//						APIManager.shared.retrieveForecast(forPosition: location, completion: { (error, forecast) in
-//							if let forecast = forecast {
-//								CoreDataManager.shared.saveForecast(withForecast: forecast, location: location, cityName: self.newForecastText!)
-//								self.forecasts = CoreDataManager.shared.retrieveAllSavedForecasts()
-//								self.tableView.reloadData()
-//							}
-//						})
-//					}
-//				})
+				self.newForecastText = TF!.text!
+				location(fromAddress: self.newForecastText, completion: { (location) in
+					if let location = location {
+						APIManager.shared.retrieveForecast(forPosition: location, completion: { (error, forecast) in
+							if let forecast = forecast {
+								CoreDataManager.shared.saveForecast(withForecast: forecast, location: location, cityName: self.newForecastText)
+								self.updateTableView()
+							}
+						})
+					}
+				})
 			}
 			actionSheetController.addAction(cancelAction)
 			actionSheetController.addAction(nextAction)

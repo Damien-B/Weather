@@ -70,6 +70,9 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                     <state key="normal" title="Button"/>
+                                                    <connections>
+                                                        <action selector="buttonClicked:" destination="OOn-B6-RMD" eventType="touchUpInside" id="sGg-TA-9G3"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
