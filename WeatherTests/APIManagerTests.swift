@@ -8,7 +8,7 @@
 
 import XCTest
 import CoreLocation
-@testable import LBCWeather
+@testable import Weather
 
 class APIManagerTests: XCTestCase {
 	

@@ -25,6 +25,8 @@ class ForecastsListViewController: UIViewController {
 		forecastsTableView.rowHeight = UITableViewAutomaticDimension
 		forecastsTableView.estimatedRowHeight = 100
 		
+		title = "FORECAST_LIST_VIEW_TITLE".localized
+		
 		updateTableView()
 		updateForecastsIfNecessary()
     }

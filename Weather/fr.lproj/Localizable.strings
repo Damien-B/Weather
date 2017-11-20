@@ -6,6 +6,7 @@
   Copyright © 2017 Damien Bannerot. All rights reserved.
 */
 
+"FORECAST_LIST_VIEW_TITLE" = "Liste de prévisions";
 "FORECAST_LIST_VIEW_ADD_LOCATION" = "Ajouter un lieu";
 
 "FORECAST_DETAIL_VIEW_TEMPERATURE_TITLE" = "Température (sur 3 heures) :";

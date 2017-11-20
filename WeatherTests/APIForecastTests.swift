@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import LBCWeather
+@testable import Weather
 
 class APIForecastTests: XCTestCase {
 	
