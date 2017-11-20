@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class ForecastsListViewController: UIViewController {
 
@@ -23,17 +24,39 @@ class ForecastsListViewController: UIViewController {
 		forecastsTableView.rowHeight = UITableViewAutomaticDimension
 		forecastsTableView.estimatedRowHeight = 100
 		
-		forecastsList = CoreDataManager.shared.retrieveAllSavedForecasts()
-		forecastsTableView.reloadData()
-		
+		updateTableView()
+		updateForecastsIfNecessary()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+	
+	// MARK: - Helpers
+	
+	func updateTableView() {
+		forecastsList = CoreDataManager.shared.retrieveAllSavedForecasts()
+		forecastsTableView.reloadData()
+	}
+	
+	func updateForecastsIfNecessary() {
+		for forecast in forecastsList {
+			if !forecast.isUpToDate() {// check for new data only if the date outdated
+				let location = CLLocation(latitude: forecast.latitude, longitude: forecast.longitude)
+				APIManager.shared.retrieveForecast(forPosition: location) { (error, APIforecast) in
+					if let APIforecast = APIforecast {
+						CoreDataManager.shared.saveForecast(withForecast: APIforecast, location: location, cityName: forecast.cityName ?? "Lieu inconnu")
+						self.updateTableView()
+					}
+				}
+			}
+		}
+	}
 
 }
+
+// MARK: - ActionTableViewCellDelegate
 
 extension ForecastsListViewController: ActionTableViewCellDelegate {
 	
@@ -73,6 +96,8 @@ extension ForecastsListViewController: ActionTableViewCellDelegate {
 	}
 }
 
+// MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension ForecastsListViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
@@ -101,6 +126,21 @@ extension ForecastsListViewController: UITableViewDelegate, UITableViewDataSourc
 		let defaultCell = UITableViewCell()
 		defaultCell.textLabel?.text = "default cell - a problem occured"
 		return defaultCell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		// TODO
+		tableView.deselectRow(at: indexPath, animated: true)
+	}
+	
+	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+		return indexPath.row != forecastsList.count
+	}
+	
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+		CoreDataManager.shared.deleteForecast(forecastsList[indexPath.row])
+		forecastsList.remove(at: indexPath.row)
+		tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
 	}
 	
 }

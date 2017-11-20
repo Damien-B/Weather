@@ -19,7 +19,7 @@ class Tests {
 //				let entity = NSEntityDescription.entity(forEntityName: "Forecast", in: CoreDataManager.shared.managedObjectContext)!
 //				let test = Forecast.init(withAPIForecast: forecast, position: loc, date: Date().getCurrentForecastDate(), isUserLocation: false, entity: entity, insertInto: CoreDataManager.shared.managedObjectContext)
 //				try! CoreDataManager.shared.managedObjectContext.save()
-				CoreDataManager.shared.saveForecast(withForecast: forecast, location: loc, cityName: "PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS ")
+				CoreDataManager.shared.saveForecast(withForecast: forecast, location: loc, cityName: "PARIS")
 			}
 		}
 	}
