@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Weather
+
+  Created by Damien Bannerot on 20/11/2017.
+  Copyright © 2017 Damien Bannerot. All rights reserved.
+*/
+
+"FORECAST_LIST_VIEW_ADD_LOCATION" = "Add a location";
+
+"FORECAST_DETAIL_VIEW_TEMPERATURE_TITLE" = "Temperature (on 3 hours) :";
+"FORECAST_DETAIL_VIEW_WIND_TITLE" = "Wind :";
+"FORECAST_DETAIL_VIEW_NEBULOSITY_TITLE" = "Cloud cover :";
+"FORECAST_DETAIL_VIEW_RAIN_TITLE" = "Rain :";
+"FORECAST_DETAIL_VIEW_UNKNOWN_CITY_PLACEHOLDER" = "Unknown place";

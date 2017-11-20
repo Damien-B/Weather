@@ -129,7 +129,12 @@ extension ForecastsListViewController: UITableViewDelegate, UITableViewDataSourc
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		// TODO
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let detailViewController = storyboard.instantiateViewController(withIdentifier: "ForecastDetailViewController") as! ForecastDetailViewController
+		detailViewController.forecast = forecastsList[indexPath.row]
+		if let navigationController = navigationController {
+			navigationController.pushViewController(detailViewController, animated: true)
+		}
 		tableView.deselectRow(at: indexPath, animated: true)
 	}
 	
